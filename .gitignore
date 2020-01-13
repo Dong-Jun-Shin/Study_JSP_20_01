@@ -1,5 +1,8 @@
-docs/
-examples/
-host-manager/
-manager/
-ROOT/
+# server
+Servers/
+
+# eclipse
+.metadata/
+*.project
+*.settings/
+*.classpath
