@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
+
+		<title>Get Data</title>
+		
+		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
+		<link rel="shortcut icon" href="../image/icon.png" />
+		<link rel="apple-touch-icon" href="../image/icon.png" />
+		<!-- 모바일 웹 페이지 설정 끝 -->
+		
+		<!--[if lt IE 9] IE9라면 실행>
+		<script src="../js/html5shiv.js"></script>
+		<![endif]-->
+		
+		<style type="text/css">
+			label{
+				display: inline-block;
+				width: 60px;
+				line-height: 40px;
+			}
+			
+			p{
+				font-size: 20px;
+			}
+			
+			input{
+				height: 25px;
+			}
+			
+			button{
+				width: 80px;
+				height: 30px;
+				margin: 5px;
+			}
+		</style>
+		
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+			$(function(){				
+				$("input[type='button']").click(function(){
+// 				$("#dataForm").submit(function(){
+					if($("#name").val().replace(/\s/g, "")==""){
+						alert("이름을 입력해주세요!");
+						$("#name").val("");
+						$("#name").focus();
+						
+						return; //현재 메소드를 종료
+					}
+					
+					if($("#address").val().replace(/\s/g, "")==""){
+						alert("주소를 입력해주세요!");
+						$("#address").val("");
+						$("#address").focus();
+						
+						return;
+					}
+					
+					$("#dataForm").attr({
+						"method" : "post",
+						"action" : "/servletExam/getData"
+					});
+					
+					$("#dataForm").submit();
+				});
+			})
+		</script>
+	</head>
+	<body>
+		<p>
+			GetData.html --> 요청 url: /servletExam/getData<br />
+			method : post방식 / 입력 양식의 이름 및 아이디 (순서대로): dataForm, name, address<br />
+			서블릿 name : GetData 생성
+		</p>
+		<form id="dataForm">
+			<label>이름:</label><input type="text" name="name" id="name" placeholder="이름"><br />
+			<label>주소:</label><input type="text" name="address" id="address" placeholder="주소"><br />
+			<input type="button" value="전송">
+<!-- 			<button type="submit" >전송</button> -->
+			<button type="reset">취소</button>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
+
+		<title>Insert title here</title>
+		
+		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
+		<link rel="shortcut icon" href="../image/icon.png" />
+		<link rel="apple-touch-icon" href="../image/icon.png" />
+		<!-- 모바일 웹 페이지 설정 끝 -->
+		
+		<!--[if lt IE 9] IE9라면 실행>
+		<script src="../js/html5shiv.js"></script>
+		<![endif]-->
+		
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("input[type=button]").click(function(){
+					var list = $("select[name='list'] > option:selected");
+					if(list.index() < 0) {
+						alert("점심 메뉴를 선택해 주세요.");
+						return;
+					}
+
+// 					var list = $("select[name='list']").val();
+// 					if(list.length < 2){
+// 						alert("2개 이상 선택해주세요.");
+// 						return;
+// 					}
+					
+					$("#dataForm").attr({
+						"method" : "post",
+						"action" : "/servletExam/todayMenu"
+					})
+					
+					$("#dataForm").submit();
+				});
+			})
+		</script>
+	</head>
+	<body>
+		<p>
+			lunch.html --> 요청 url: /servletExam/todayMenu<br />
+			method : post방식<br />
+			서블릿 name : TodayMenu 생성
+		</p>
+		<h1>오늘 점심은 무엇을 먹을까? (2개이상 선택)</h1>
+		<form id="dataForm">
+			<select multiple="multiple" size="4" name="list">
+				<option value="떡볶이">떡볶이</option>
+				<option value="버섯덮밥">버섯덮밥</option>
+				<option value="칼국수">칼국수</option>
+				<option value="비빔밥">비빔밥</option>
+				<option value="햄버거">햄버거</option>
+				<option value="치킨">치킨</option>
+				<option value="부대찌개">부대찌개</option>
+			</select><br />
+			<input type="button" value="전송" />
+		</form>
+	</body>
+</html>
