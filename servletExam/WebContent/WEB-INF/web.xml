@@ -21,4 +21,14 @@
   	<servlet-name>outPrint</servlet-name>
   	<url-pattern>/print</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>calc</servlet-name>
+  	<servlet-class>com.exam.CalcServlet2</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>calc</servlet-name>
+  	<url-pattern>/calcServlet2</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
