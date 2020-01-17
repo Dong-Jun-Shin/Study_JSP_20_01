@@ -3,6 +3,5 @@ Servers/
 
 # eclipse
 .metadata/
-*.project
 *.settings/
 *.classpath
