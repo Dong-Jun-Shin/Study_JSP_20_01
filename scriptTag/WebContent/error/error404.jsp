@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page isErrorPage = "true" %>
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -42,13 +41,6 @@
 			<div id="imgView">
 				<img src="../image/error404.png" />
 			</div>
-	
- 			<div id="msgView">
- 				<label>에러 타입: </label>
- 				<%= exception.getClass().getName() %><br />
- 				<label>에러 메시지: </label>
- 				<strong><%= exception.getMessage() %></strong>
- 			</div>
 		</div>
 	</body>
 </html>

@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page isErrorPage = "true" %>
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -8,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
 
-		<title>404-error</title>
+		<title>500-error</title>
 		
 		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
 		<link rel="shortcut icon" href="../image/icon.png" />
@@ -33,22 +32,15 @@
 		
 		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript">
-		
+
 		</script>
 	</head>
 	<body>
 		<div id="wrapper">
 			<!-- head와 img를 다 지워서 512KB 이하를 만들면, 익스플로러에서 자체적인 오류페이지를 보여준다. -->
 			<div id="imgView">
-				<img src="../image/error404.png" />
+				<img src="../image/error500.png" />
 			</div>
-	
- 			<div id="msgView">
- 				<label>에러 타입: </label>
- 				<%= exception.getClass().getName() %><br />
- 				<label>에러 메시지: </label>
- 				<strong><%= exception.getMessage() %></strong>
- 			</div>
 		</div>
 	</body>
 </html>

@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
 
-		<title>예외 처리</title>
+		<title>예외 처리(try~catch)</title>
 		
 		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
 		<link rel="shortcut icon" href="../image/icon.png" />
@@ -24,20 +24,6 @@
 		</script>
 	</head>
 	<body>
-		<%--
-			<p>
-				name 파라미터 값:
-	 			<%= request.getParameter("name").toUpperCase() %> 
-	 		</p>
-		--%>
-		<%--
-			<p>배열의 원소 출력:
-			<%
-				String[] language = {"자바", "오라클", "프로트 엔드", "백 엔드"};
-				out.print(language[5]);
-			%>
-		--%>
-	
 		<% try{ %>
 			<p>
 				name 파라미터 값:
