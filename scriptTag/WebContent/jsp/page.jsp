@@ -7,7 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
 
-		<title>Insert title here</title>
+		<title>요청 받을 페이지</title>
 		
 		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
 		<link rel="shortcut icon" href="../image/icon.png" />
@@ -24,6 +24,6 @@
 		</script>
 	</head>
 	<body>
-		
+		다른 파일을 삽입하는 include(), 제어권을 넘기는 forward() 메서드 제공
 	</body>
 </html>

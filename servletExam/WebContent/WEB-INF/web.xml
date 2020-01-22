@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-  
   <display-name>servletExam</display-name>
   <welcome-file-list>
 	<!-- 시작할 파일들을 명시 (localhost:8080/[index.jsp])-->
@@ -29,6 +28,39 @@
   <servlet-mapping>
   	<servlet-name>calc</servlet-name>
   	<url-pattern>/calcServlet2</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>initParam</servlet-name>
+  	<servlet-class>com.exam.InitParamServlet</servlet-class>
+  	<init-param>
+  		<param-name>adminId</param-name>
+		<param-value>javauser</param-value>
+  	</init-param>
+  	<init-param>
+  		<param-name>adminPwd</param-name>
+		<param-value>java1234</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup> <!-- 로딩 순서 지정 -->
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>initParam</servlet-name>
+  	<url-pattern>/initParamTest </url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>configTest</servlet-name>
+  	<servlet-class>com.exam.ServletConfigTestServlet</servlet-class>
+  	<init-param>
+  		<param-name>charset</param-name>
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+  	<load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>configTest</servlet-name>
+  	<url-pattern>/servletConfigTest</url-pattern>
   </servlet-mapping>
   
   <context-param>
