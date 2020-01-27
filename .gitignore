@@ -5,3 +5,4 @@ Servers/
 .metadata/
 *.settings/
 *.classpath
+*bin/
