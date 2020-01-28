@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
+
+		<title>점수 입력 예제</title>
+		
+		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
+		<link rel="shortcut icon" href="../image/icon.png" />
+		<link rel="apple-touch-icon" href="../image/icon.png" />
+		<!-- 모바일 웹 페이지 설정 끝 -->
+		
+		<!--[if lt IE 9] IE9라면 실행>
+		<script src="../js/html5shiv.js"></script>
+		<![endif]-->
+		
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("button[type='button']").click(function(){
+					$("#form1").attr({
+						"method":"post",
+						"action" : "../jsp/javaBean/scoretag.jsp"
+					})
+					$("#form1").submit();
+				})
+			})
+		</script>
+	</head>
+	<body>
+		<form name="form1" id="form1">
+			<h1>이름과 점수를 입력하세요</h1>
+			<div>
+				이름: <input type="text" placeholder="홍길동" name="name" id="name" maxlength="5"/> <br />
+				점수: <input type="text" placeholder="88" name="point" id="point" maxlength="3"/>
+			</div>
+			<div>
+				<button type="button">입력완료</button>
+				<button type="reset">다시쓰기</button>
+			</div>
+		</form>
+	</body>
+</html>
