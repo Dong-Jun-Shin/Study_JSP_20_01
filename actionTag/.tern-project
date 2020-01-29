@@ -11,10 +11,5 @@
     "ecma5",
     "browser"
   ],
-  "ecmaVersion": 5,
-  "ide": {
-    "scriptPaths": [
-      
-    ]
-  }
+  "ecmaVersion": 5
 }
