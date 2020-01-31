@@ -1,7 +1,5 @@
-<%@page import="util.Cookies"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% Cookies cookies = new Cookies(request); %>
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -12,33 +10,24 @@
 		<title>Insert title here</title>
 		
 		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
-		<link rel="shortcut icon" href="../image/icon.png" />
-		<link rel="apple-touch-icon" href="../image/icon.png" />
+		<link rel="shortcut icon" href="../../image/icon.png" />
+		<link rel="apple-touch-icon" href="../../image/icon.png" />
 		<!-- 모바일 웹 페이지 설정 끝 -->
 		
 		<!--[if lt IE 9] IE9라면 실행>
 		<script src="../js/html5shiv.js"></script>
 		<![endif]-->
 		
-		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript">
-			$(function(){
-				$("#btnPrev").click(function(){
-					history.go(-1);
-				});
-			});
+		
 		</script>
 	</head>
 	<body>
 		<%
-			if(cookies.exists("AUTH")){
-				out.print("아이디 ");				
-				out.print(cookies.getValue("AUTH"));
-				out.print("\"로 로그인한 상태");
-			}else{
-				out.print("로그인하지 않은 상태");
-			}
+			// session 객체를 무효화(로그아웃 처리)
+			session.invalidate();
+			response.sendRedirect("sessionForm.jsp");
 		%>
-		<button type="button" id="btnPrev">뒤로 가기</button>
 	</body>
 </html>

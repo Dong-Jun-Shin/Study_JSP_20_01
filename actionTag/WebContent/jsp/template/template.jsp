@@ -46,7 +46,7 @@
 			</div>
 			<div id="contents">
 				<section>
-					<jsp:include page="<%=pagefile+pagefileEx %>" />
+					<jsp:include page="<%=pagefile + pagefileEx %>" />
 				</section>
 			</div>
 			<div id="footer">
