@@ -1,6 +1,7 @@
 package com.student;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,7 +66,7 @@ public class StudentDAO {
 				vo.setSd_name(rs.getString("sd_name"));
 				vo.setSd_id(rs.getString("sd_id"));
 				vo.setS_num(rs.getString("s_num"));
-				vo.setSd_birth(rs.getDate("sd_birth").toString());
+				vo.setSd_birth(rs.getString("sd_birth").toString());
 				vo.setSd_phone(rs.getString("sd_phone"));
 				vo.setSd_address(rs.getString("sd_address"));
 				vo.setSd_email(rs.getString("sd_email"));
@@ -89,5 +90,124 @@ public class StudentDAO {
 		}
 		
 		return list;
+	}	
+	
+	public String getStudentCount(String subjectNum) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String serialNumber = "";
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT NVL(LPAD(MAX(TO_NUMBER(LTRIM(SUBSTR(sd_num,5,4), '0')))+1, 4, '0'), '0001') AS s_num ");
+		sql.append("FROM student WHERE s_num = ?");
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, subjectNum);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				serialNumber = rs.getString("s_num");
+			}
+		} catch (SQLException sqle) {
+			System.out.println("getStudentNumber 쿼리 error = [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("getStudentNumber error = [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("디비 연동 해제 error = [ " + e + " ]");
+				e.printStackTrace();
+			}
+		}
+		
+		return serialNumber;
 	}
-}
+	
+	public int idCheck(String sd_id){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT nvl((SELECT 1 FROM student WHERE sd_id = ?), 0) AS state FROM dual");
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, sd_id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) result = rs.getInt("state");			
+		} catch (SQLException sqle) {
+			System.out.println("idCheck 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("idCheck 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch (SQLException sqle) {
+				System.out.println("디비 연동 해제 error [ " + sqle + " ]");
+				sqle.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public int studentInsert(StudentVO vo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO student(no, sd_num, sd_name, sd_id, sd_passwd, ");
+		sql.append("s_num, sd_birth, sd_phone, sd_address, sd_email) "); 
+		sql.append("VALUES(seq_student_no.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			
+			pstmt.setString(1, vo.getSd_num());
+			pstmt.setString(2, vo.getSd_name());
+			pstmt.setString(3, vo.getSd_id());
+			pstmt.setString(4, vo.getSd_passwd());
+			pstmt.setString(5, vo.getS_num());
+			pstmt.setDate(6, Date.valueOf(vo.getSd_birth().toString()));
+			pstmt.setString(7, vo.getSd_phone());
+			pstmt.setString(8, vo.getSd_address());
+			pstmt.setString(9, vo.getSd_email());
+			result = pstmt.executeUpdate();
+			 
+		} catch (SQLException sqle) {
+			System.out.println("idCheck 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("idCheck 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch (SQLException sqle) {
+				System.out.println("디비 연동 해제 error [ " + sqle + " ]");
+				sqle.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+}	

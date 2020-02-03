@@ -1,6 +1,6 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.student.SubjectDAO"%>
 <%@page import="com.student.SubjectVO"%>
+<%@page import="com.student.SubjectDAO"%>
+<%@page import="java.util.ArrayList"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -52,6 +52,82 @@
 		<script type="text/javascript" src="../js/common.js"></script>
 		<script type="text/javascript">
 			$(function(){
+				// "학과명" 선택에 따른 제어
+				$("#s_num").change(function(){
+					if($("#s_num > option:selected").index() > 0){
+						$.ajax({
+							url: "/jdbcProgramming/jsp/result.jsp",
+							type: "post",
+							data: "s_num=" + $("#s_num").val(),
+							datatype: "text",
+							
+							success: function(data){
+								$("#sd_num").val(data);
+							},
+						
+							error: function(xhr, textStatus, errorThrown){
+								alert("잠시후에 다시 시도해 주세요.");
+							}
+						});
+					}else{
+						$("#sd_num").val("");
+					}
+				});
+				
+				// 아이디 중복체크
+				//버튼식
+// 				$("#idBtn").click(function(){
+// 					$.ajax({
+// 						url: "idCheck.jsp",
+// 						type: "post",
+// 						data: "sd_id=" + $("#sd_id").val(),
+// 						datatype: "text",
+						
+// 						success: function(data){
+// 							console.log(data);
+// 							console.log(typeof(data));
+							
+// 							if(data=="0"){
+// 								alert("사용 가능한 아이디입니다!");
+// 								$("#idBtn").attr({"disabled" : "disabled"});
+// 							}else{
+// 								alert("이미 사용중인 아이디입니다!");
+// 							}
+// 						},
+						
+// 						error: function(xhr, textStatus, errorThrown){
+// 							alert("잠시후에 다시 시도해 주세요.");	
+// 						}
+// 					});
+// 				});
+
+				//키 입력 체크식
+				$("#sd_name").keyup(function(){
+					if($("#sd_id").val().replace(/\s/g,"")!=""){
+						$.ajax({
+							url: "idCheck.jsp",
+							type: "post",
+							data: "sd_id=" + $("#sd_id").val(),
+							dataType: "text",
+							
+							success: function(data){
+								if(parseInt(data)==1){
+									//alert("중복된 아이디 입니다. 다시 입력해주세요.");
+									$("#sd_id").val("");
+									$("#sd_id").attr("placeholder", "중복된 아이디입니다. 다시 입력해 주세요.");
+								}
+							},
+							
+							error: function(xhr, textStatus, errorThrown){
+								alert("잠시 후에 다시 시도해 주세요.");
+							}
+						})
+					}else{
+						$("#sd_id").val("");
+						$("#sd_id").attr("placeholder", "아이디를 입력해주세요!");
+					}
+				})
+				
 				// "입력완료" 버튼 제어
 				$("#insertBtn").click(function(){
 					if($("#s_num > option:selected").index() == 0){
@@ -78,15 +154,7 @@
 				$("#resetBtn").click(function(){
 					$("#student").each(function(){
 						this.reset();
-					})
-				})
-				
-				// "학과명" 선택에 따른 제어
-				$("#s_num").change(function(){
-					var now = new Date();
-					var year = now.getFullYear().toString().substr(0, 2);
-					// TODO 학번 받아오는 제어하기
-					$("#sd_num").val(year + $("#s_num").val() + "0001");
+					});
 				});
 			});
 		</script>
@@ -113,9 +181,7 @@
 						<td>
 							<select name="s_num" id="s_num">
 								<option>학과를 선택해 주세요</option>
-								<%
-								  for(SubjectVO svo : list){ 
-								%>
+								<% for(SubjectVO svo : list){ %>
 								<option value="<%=svo.getS_num() %>"><%=svo.getS_name() %></option>	
 								<%} %>
 							</select>
@@ -123,7 +189,11 @@
 					</tr>	
 					<tr>
 						<td>아 이 디</td>
-						<td><input type="text" name="sd_id" id="sd_id" maxlength="14"/></td>
+						<td>
+							<input type="text" name="sd_id" id="sd_id" maxlength="14"/>
+							<button type="button" name="idBtn" id="idBtn" >ID체크</button>
+						</td>
+						
 					</tr>	
 					<tr>
 						<td>학생 이름</td>

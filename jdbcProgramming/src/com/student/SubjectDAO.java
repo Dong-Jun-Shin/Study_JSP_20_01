@@ -76,42 +76,4 @@ public class SubjectDAO {
 		
 		return list;
 	}
-	
-	public String getStudentCount(String subjectNum) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		String serialNumber = "";
-		
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT NVL(LPAD(MAX(LTRIM(SUBSTR(std.sd_num,5,4), '0')), '4', '0'), '0001') AS s_num");
-		sql.append("FROM student std INNER JOIN subject sbj ON std.s_num = sbj.s_num ");
-		sql.append("WHERE sbj.s_num = ?");
-		
-		try {
-			con = getConnection();
-			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setString(1, subjectNum);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				serialNumber = rs.getString("s_num");
-			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(pstmt != null) pstmt.close();
-				if(con != null) con.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return serialNumber;
-	}
-}	
+}
