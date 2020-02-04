@@ -55,8 +55,23 @@
 			}
 		</style>
 		
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="../js/common.js"></script>
 		<script type="text/javascript">
-			
+			$(function(){
+				$("#send").click(function(){
+					if(checkExp($("#b_writer"), "글쓴이")) return;
+					if(checkExp($("#b_title"), "제목")) return;
+					if(checkExp($("#b_content"), "내용")) return;
+					
+					$("#board_form").attr({
+						"method": "post",
+						"action": "insertBoard.jsp"
+					});
+					
+					$("#board_form").submit();
+				});
+			})
 		</script>
 	</head>
 	<body>
@@ -80,18 +95,12 @@
 				<tr>
 					<th id="contentLabel">내용:</th>
 					<td rowspan="2">
-						<textarea rows="40" cols="100" placeholder="내용을 입력해 주세요"></textarea>
-						
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
+						<textarea rows="40" cols="100" placeholder="내용을 입력해 주세요" name="b_content" id="b_content"></textarea>
 					</td>
 				</tr>
 			</table>
 			<div class="send">
-				<input type="button" name="submit" id="submit" value="입력 완료"/>
+				<input type="button" name="send" id="send" value="입력 완료"/>
 			</div>
 		</form>
 	</body>

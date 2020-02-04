@@ -1,16 +1,19 @@
 package com.student;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
 public class SubjectDAO {
-	private static final String JDBC_URL = "jdbc:oracle:thin:@localhost:1521:orcl";
-	private static final String USER = "javauser";
-	private static final String PASSWD = "java1234";
+//	private static final String JDBC_URL = "jdbc:oracle:thin:@localhost:1521:orcl";
+//	private static final String USER = "javauser";
+//	private static final String PASSWD = "java1234";
 	
 	private static SubjectDAO instance = new SubjectDAO();
 	
@@ -18,17 +21,23 @@ public class SubjectDAO {
 		return instance;
 	}
 	
-	private SubjectDAO() {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		}catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
-	}
+//	private SubjectDAO() {
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//		}catch (ClassNotFoundException cnfe) {
+//			cnfe.printStackTrace();
+//		}
+//	}
 			
-	private Connection getConnection() throws SQLException{
-		Connection con = DriverManager.getConnection(JDBC_URL, USER, PASSWD);
-		return con;
+//	private Connection getConnection() throws SQLException{
+//		Connection con = DriverManager.getConnection(JDBC_URL, USER, PASSWD);
+//		return con;
+//	}
+
+	private Connection getConnection() throws Exception{
+		Context ctx = new InitialContext();
+		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/Oracle11g");
+		return ds.getConnection();
 	}
 	
 	/**

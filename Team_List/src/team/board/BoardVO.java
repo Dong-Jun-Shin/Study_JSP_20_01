@@ -5,7 +5,7 @@ public class BoardVO {
 	private String b_title;
 	private String b_writer;
 	private String b_reg_date;
-	private String b_hits;
+	private int b_hits;
 	private String b_content;
 	private String b_file;
 
@@ -57,11 +57,11 @@ public class BoardVO {
 		this.b_reg_date = b_reg_date;
 	}
 
-	public String getB_hits() {
+	public int getB_hits() {
 		return b_hits;
 	}
 
-	public void setB_hits(String b_hits) {
+	public void setB_hits(int b_hits) {
 		this.b_hits = b_hits;
 	}
 

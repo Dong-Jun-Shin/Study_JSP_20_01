@@ -2,18 +2,22 @@ package com.student;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 //테이블 student를 위한 데이터베이스 연동 자바빈즈 프로그램
 public class StudentDAO {
-	// 데이터베이스 연결 관련 상수 선언
-	private static final String JDBC_URL =  "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
-	private static final String USER = "javauser";
-	private static final String PASSWD = "java1234";
+	// 데이터베이스 연결 관련 상수 선언 - 커넥션 풀을 사용함으로써 생략
+//	private static final String JDBC_URL =  "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+//	private static final String USER = "javauser";
+//	private static final String PASSWD = "java1234";
 	
 	private static StudentDAO instance = new StudentDAO();
 	
@@ -21,18 +25,30 @@ public class StudentDAO {
 		return instance;
 	}
 	
-	/* private StudentDAO() {} */
 	private StudentDAO() {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		}catch(ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
+		
 	}
 	
-	private Connection getConnection() throws SQLException{	
-		Connection con = DriverManager.getConnection(JDBC_URL, USER, PASSWD);
-		return con;
+	/* private StudentDAO() {} */
+//	private StudentDAO() {
+//		try {
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//		}catch(ClassNotFoundException cnfe) {
+//			cnfe.printStackTrace();
+//		}
+//	}
+	
+	// 커넥션 풀을 사용함으로써 생략
+//	private Connection getConnection() throws SQLException{	
+//		Connection con = DriverManager.getConnection(JDBC_URL, USER, PASSWD);
+//		return con;
+//	}
+
+	// 커넥션 풀을 사용함으로써 생략
+	private Connection getConnection() throws Exception{	
+		Context ctx = new InitialContext();
+		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/Oracle11g");
+		return ds.getConnection();
 	}
 	
 	/**

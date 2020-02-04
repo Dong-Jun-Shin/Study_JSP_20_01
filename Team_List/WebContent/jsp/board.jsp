@@ -28,27 +28,32 @@
 		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript">
 			$(function(){
+				$.ajax({
+					url: "board.jsp",
+					type: "post"
+				})
+				
 				$("#more").click(function(){
 					location.href = "board_form.jsp";
 				})
 				
-// 				//검색 부분
-// 				$("#searchBtn").click(function(){
-// 					$.ajax({
-// 						url: "",
-// 						type: "post",
-// 						data: "keyword=" + $("#search").val() + "&sort=" + $("#sort > option:selected").val(),
-// 						dataType: "text",
+				//검색 부분
+				$("#searchBtn").click(function(){
+					$.ajax({
+						url: "searchBoard.jsp",
+						type: "post",
+						data: "keyword=" + $("#search").val() + "&sort=" + $("#sort > option:selected").val(),
+						dataType: "text",
 						
-// 						success: function(data){
+						success: function(data){
 							
-// 						},
+						},
 						
-// 						error: function(xhr, textStatus, errorThrown){
+						error: function(xhr, textStatus, errorThrown){
 							
-// 						}
-// 					})
-// 				})
+						}
+					})
+				})
 			})
 		</script>
 	</head>
@@ -83,8 +88,7 @@
 						<!-- 목록이 추력될 곳 -->
 						<%
 						if(counter > 0){
-							for(int i = 0; i < counter; i++){ 
-								BoardVO bvo = list.get(counter-(i+1));
+							for(BoardVO bvo : list){ 
 						%>
 								<tr class="list">
 									<td class="no"><%=bvo.getB_num() %></td>
