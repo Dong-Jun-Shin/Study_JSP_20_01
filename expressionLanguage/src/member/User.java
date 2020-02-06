@@ -10,6 +10,13 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
+	public User(String uname, String uid, int unum) {
+		super();
+		this.uname = uname;
+		this.uid = uid;
+		this.unum = unum;
+	}
+
 	public String getUname() {
 		return uname;
 	}
