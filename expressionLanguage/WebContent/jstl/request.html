@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
+
+		<title>예제</title>
+		
+		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
+		<link rel="shortcut icon" href="../image/icon.png" />
+		<link rel="apple-touch-icon" href="../image/icon.png" />
+		<!-- 모바일 웹 페이지 설정 끝 -->
+		
+		<!--[if lt IE 9] IE9라면 실행>
+		<script src="../js/html5shiv.js"></script>
+		<![endif]-->
+		
+		<style type="text/css">
+			*{
+				padding: 5px;
+			}
+			
+			table{
+				width: 400px;
+				height: 500px;
+			}
+			
+			table, td {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+			
+			tr > td:nth-child(1) {
+				text-align: center;
+			}
+			
+			td span, option{
+				padding: 0px;
+			}
+			
+			#grad{
+				display: none;
+			}
+		</style>
+		
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+			function createOpt(data){
+				var option = $("<option>");
+				option.attr("value", data);
+				option.html(data);
+				
+				return option;
+			}
+		
+			function scholarChange(optVal){
+				for (var i = 0; i < optVal.length; i++) {
+					$("#major").append(createOpt(optVal[i]));
+				}
+			}
+			
+			$(function(){
+				$("input[name='scholarship']").change(function(){
+					$.ajax({
+						url: "../js/major.json",
+						type: "get",
+						datatype: "json",
+						timeout: 30000,
+						cache: false,
+						
+						success: function(data){
+							var scholarVal = $("input[name='scholarship']:checked").val();
+							$("#major").empty();
+							$("#grad").css("display", "none");
+							
+							if(scholarVal=="고졸"){
+								scholarChange(data.major.high);
+							}else if(scholarVal=="대졸"){
+								scholarChange(data.major.univ);
+							}else if(scholarVal=="대학원졸"){
+								scholarChange(data.major.grad);
+								
+								// 2차 select 목록 생성
+								$("#grad").css("display", "inline");
+								$("#grad").append(createOpt("석사"));
+								$("#grad").append(createOpt("박사"));
+							}
+						}
+					})
+				}) ;
+				
+				/* 유효성 검사 체크하기 */
+				$("#btnSubmit").click(function(){
+					// 유효성 검사할 요소
+					var name = $("#name");
+					var birth = $("#birth");
+					var scholarBool = $("input[name='scholarship']").is(":checked");
+					var scholarVal = $("input[name='scholarship']:checked");
+					var platform = $("#platform");
+					
+					var langChk = "";
+					$("input[name='language']:checked").each(function(){
+						langChk += $(this).val() + " ";
+					});
+					
+					// 유효성에 체크 정규식
+					var spaceExp = /\s/g;
+
+					// 이름
+					if(name.val().replace(spaceExp, "")==""){
+						alert("이름을 입력해주세요.");
+						name.val("");
+						name.focus();
+						
+						return;
+					}
+					
+					// 생일
+					if(birth.val()==""){
+						alert("날짜를 입력해주세요.");
+						birth.val("");
+						birth.focus();
+						
+						return;
+					}
+					
+					// 학력
+					if(!scholarBool){
+						alert("학력을 선택해주세요.");
+						scholarVal.val("");
+						scholarVal.focus();
+						
+						return;
+					}
+					
+					// 사용가능 언어
+					if(langChk==""){
+						alert("사용가능 언어를 선택해주세요.");
+						$("input[name='language']:eq(0)").focus();
+						
+						return;
+					}
+					
+					// form에 method와 action 추가
+					$("#dataForm").attr({
+						"method" : "post",
+						"action" : "request.jsp"
+					})
+					
+					// submit 실행
+					$("#dataForm").submit();
+				});
+				
+				$("#btnReset").click(function(){
+					// 폼 내의 요소 수만큼 reset을 반복한다.
+					$("#dataForm").each(function(){
+						this.reset();
+					});
+					
+					
+					/*
+						.attr : 값이 명확한 것 (속성과 값이 딱 구분되는 경우) 
+							(src="../image.jpg", size="1"...)
+						.prop : 값이 명확하지 않은 것 (속성이름이 값으로 받는 경우)
+							(selected = "selected", checked = "checked"...)
+					*/
+					// 학력이 지워져도 학과(전공)이 남아있기 때문에 초기값으로 맞추는 코드
+					// prop와 click을 주면 prop가 이미 체크를 하고, click이 되어버려서 변화가 안 일어난 걸로 인식이 된다.
+					// $("input[name='scholarship']:eq(0)").prop("checked", "true");
+					$("input[name='scholarship']:eq(0)").click();
+					
+				})
+			})
+		</script>
+	</head>
+	<body>
+		<form id="dataForm">
+			<table>
+				<tr>
+					<th colspan="2">기술 정보 이력</th>
+				</tr>
+				<tr>
+					<td>이름</td>
+					<td><input type="text" name="name" id="name"></td>
+				</tr>
+				<tr>
+					<td>생년월일</td>
+					<td><input type="date" value="연도-월-일" name="birth" id="birth"></td>
+				</tr>
+				<tr>
+					<td>학력</td>
+					<td>
+						<span><input type="radio" name="scholarship" value="고졸"><label>고졸</label></span>
+						<span><input type="radio" name="scholarship" value="대졸"><label>대졸</label></span>
+						<span><input type="radio" name="scholarship" value="대학원졸"><label>대학원졸</label></span>
+					</td>
+				</tr>
+				<tr>
+					<td>학과(전공)</td>
+					<td>
+						<select name="major" id="major"></select>
+						<select name="grad" id="grad"></select>
+					</td>
+				</tr>
+				<tr>
+					<td>사용가능 플랫폼</td>
+					<td>
+						<select size="4" name="platform" id="platform" multiple="multiple">
+							<option value="Window 계열 PC" selected="selected">Window 계열 PC</option>
+							<option value="Window 계열 서버">Window 계열 서버</option>
+							<option value="UNIX">UNIX</option>
+							<option value="IBM OS/390">IBM OS/390</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>사용가능 언어</td>
+					<td>
+						<span><input type="checkbox" name="language" value="C"><label>C</label></span>
+						<span><input type="checkbox" name="language" value="C++"><label>C++</label></span>
+						<span><input type="checkbox" name="language" value="JAVA"><label>JAVA</label></span>
+						<span><input type="checkbox" name="language" value="C#"><label>C#</label></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="button" id="btnSubmit">보내기</button>
+						<button type="button" id="btnReset">다시작성</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>
