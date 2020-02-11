@@ -36,7 +36,19 @@
 			<mytag:now />
 			<hr />
 			
-			<mytag:sum begin="1" end="10" />
+			<mytag:sum begin="1" end="10" >
+				1에서 10까지 합: ${sum }
+			</mytag:sum>
+			<hr />
+
+			<mytag:sum begin="10" end="100" />
+				${beginValue }에서 ${endValue }까지 합: ${sum }
+			<hr />
+			
+			<%-- body-content가 empty여도 속성의 fragment가 true이면 작동은 한다. --%>
+			<mytag:header_frag level="2">
+				<jsp:attribute name="title">난 몸통을 전달받아 출력하는 태그!</jsp:attribute>
+			</mytag:header_frag>
 			<hr />
 		</div>
 	</body>

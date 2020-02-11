@@ -41,7 +41,7 @@ public class HelloServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println("<!DOCTYPE html><html>");
 		out.println("<head><meta charset='UTF-8' /><title>JSP예제</title></head>");
-		out.println("<body><h1>Hello Servlet ~~!ㅁㄴㅇ</h1></body>");
+		out.println("<body><h1>Hello Servlet ~~!</h1></body>");
 		out.println("</html>");
 		
 		out.close();

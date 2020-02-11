@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="myTag" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -8,7 +8,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />      	
 
-		<title>원하는 곱셈표를 출력합니다.</title>
+		<title>동적 요소 추가</title>
 		
 		<!-- 모바일 웹 페이지 설정 - 이미지 경로 위치는 각자 변경 -->
 		<link rel="shortcut icon" href="../image/icon.png" />
@@ -19,43 +19,18 @@
 		<script src="../js/html5shiv.js"></script>
 		<![endif]-->
 		
-		<style type="text/css">
-			table, td{
-				border: 1px solid black;
-			}
-		
-			table{
-				margin: 0px auto;
-				border-collapse: collapse;
-			}
-			
-			td{
-				 padding: 5px;
-			}
-		</style>
-		
 		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript">
 		
 		</script>
 	</head>
 	<body>
-		<h4>태그 파일을 이용한 커스텀 태그 : gugudan</h4>
-		<hr />
+		<h4>select 요소 추가</h4>
+		<myTag:select name="testColor" rgb="RGB모드" wb="흑백 모드" />
+		<myTag:select name="testMusic" rock="락" ballad="발라드" metal="메탈" />
 		
-		<table>
-			<myTag:gugudan color="skyblue">구구단 (2단에서 9단까지)</myTag:gugudan>
-		</table>
-		<hr />
-
-		<table>
-			<myTag:gugudan end="5">구구단 (2단에서 5단까지)</myTag:gugudan>
-		</table>
-		<hr />
+		<myTag:select name="testOS" windows="윈도우" mac="맥" Android="안드로이드" iOS="iOS" />
+		<myTag:select name="Korea" 가="가" 나="나" 다="다" 라="라" 마="마" />
 		
-		<table>
-			<myTag:gugudan begin="3" end="7" color="white">구구단 (3단에서 7단까지)</myTag:gugudan>
-		</table>
-		<hr />
 	</body>
 </html>
