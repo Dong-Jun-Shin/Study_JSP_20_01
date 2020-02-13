@@ -21,4 +21,23 @@ public class BoardExamService {
 		
 		return list;
 	}
+	
+	public boolean insertBoardExam(BoardExamVO bvo){
+		boolean result = bdao.insertBoardExam(bvo);
+		
+		return result;
+	}
+	
+	public void getReadCount(String num) {
+		bdao.getReadCount(num);
+	}
+	
+	public BoardExamVO boardDetail(String num) {
+		BoardExamVO bvo = bdao.boardDetail(num);
+		
+		// 입력받은 줄바꿈은 '\n'이기 때문에, 적용 가능한 '<br>'로 변경한다.
+		bvo.setContent(bvo.getContent().toString().replace("\n", "<br />"));
+		
+		return bvo;
+	}
 }

@@ -88,4 +88,222 @@ public class BoardExamDAO {
 		
 		return list;
 	}
+	
+	/**
+	 * insertBoardExam() 메서드 : 게시물 등록
+	 * 
+	 * @param bvo : 게시물의 정보를 담은 객체
+	 * @return boolean 성공 여부 리턴.
+	 */
+	public boolean insertBoardExam(BoardExamVO bvo) {
+		boolean success = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO board_exam(num, author, title, content, reproot, repstep, repindent, passwd) ");
+		sql.append("VALUES(board_exam_seq.NEXTVAL, ?, ?, ?, board_exam_seq.CURRVAL, 0, 0, ?)");
+		
+		try {
+			con = getConnection();
+			con.setAutoCommit(false);
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, bvo.getAuthor());
+			pstmt.setString(2, bvo.getTitle());
+			pstmt.setString(3, bvo.getContent());
+			pstmt.setString(4, bvo.getPasswd());
+			
+			if(pstmt.executeUpdate() == 1) {
+				con.commit();
+				success = true;
+			}else {
+				con.rollback();
+			}
+		} catch (SQLException sqle) {
+			System.out.println("insertBoardExam 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("insertBoardExam 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("insertBoardExam 쿼리 error [ " + e + " ]");
+				e.printStackTrace();
+			}
+		}
+		
+		return success;
+	}
+	
+	/**
+	 * updateBoardExam() : 게시물 수정
+	 * @param bvo
+	 * @return
+	 */
+	public boolean updateBoardExam(BoardExamVO bvo) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean success = false;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE board_exam SET title = ?, content = ? ");
+		if(bvo.getPasswd() != "") sql.append(", passwd = ? ");
+		sql.append("WHERE num = ?");
+		
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, bvo.getTitle());
+			pstmt.setString(2, bvo.getContent());
+			if(bvo.getPasswd() != "") {
+				pstmt.setString(3, bvo.getPasswd());
+				pstmt.setInt(4, bvo.getNum());
+			}else {
+				pstmt.setInt(3,  bvo.getNum());
+			}
+			
+			if(pstmt.executeUpdate() == 1) 
+				success = true;
+			
+		} catch (SQLException sqle) {
+			System.out.println("updateBoardExam 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("updateBoardExam 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("updateBoardExam 쿼리 error [ " + e + " ]");
+				e.printStackTrace();
+			}
+		}
+		
+		return success;
+	}
+	
+	/**
+	 * deleteBoardExam() : 게시물 삭제
+	 * @param num
+	 */
+	public void deleteBoardExam(String num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("DELETE FROM board_exam WHERE num = ?");
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, num);
+			
+			pstmt.executeUpdate();
+		} catch (SQLException sqle) {
+			System.out.println("deleteBoardExam 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("deleteBoardExam 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("deleteBoardExam 쿼리 error [ " + e + " ]");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * readCount() : 조회수 증가를 위한 메서드
+	 * @param num
+	 */
+	public void getReadCount(String num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE board_exam ");
+		sql.append("SET readCnt = readCnt + 1 ");
+		sql.append("WHERE num = ?");
+				
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, Integer.parseInt(num));
+			pstmt.executeUpdate();
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (SQLException sqle) {
+				sqle.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * boardDetail() : 상세 내역 조회 메서드
+	 * 
+	 * @param num
+	 * @return BoardExamVO 객체
+	 */
+	public BoardExamVO boardDetail(String num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		BoardExamVO bvo = new BoardExamVO();
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT num, author, title, content, ");
+		sql.append("TO_CHAR(writeday, 'YYYY-MM-DD HH24:MI:SS') writeday, ");
+		sql.append("readCnt, repRoot, repIndent, repStep ");
+		sql.append("FROM board_exam WHERE num = ?");
+		
+		try {
+			con = getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, Integer.parseInt(num));
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bvo.setNum(rs.getInt("num"));
+				bvo.setTitle(rs.getString("title"));
+				bvo.setAuthor(rs.getString("author"));
+				bvo.setContent(rs.getString("content"));
+				bvo.setWriteday(rs.getString("writeday"));
+				bvo.setReadcnt(rs.getInt("readCnt"));
+				bvo.setReproot(rs.getInt("repRoot"));
+				bvo.setRepstep(rs.getInt("repStep"));
+				bvo.setRepindent(rs.getInt("repIndent"));
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch (SQLException sqle) {
+				sqle.printStackTrace();
+			}
+		}
+		
+		return bvo;
+	}
 }

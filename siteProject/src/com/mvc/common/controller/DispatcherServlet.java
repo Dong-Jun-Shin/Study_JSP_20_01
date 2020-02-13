@@ -44,15 +44,15 @@ public class DispatcherServlet extends HttpServlet {
 		// 요청 URL에서 http://localhost:8080/siteProject/board_exam/getBoardExamList.do
 		String uri = request.getRequestURI();
 		// URI인 /siteProject/board_exam/getBoardList.do를 얻는다.
-		 System.out.println("요청 URI : " + uri);
+//		System.out.println("요청 URI : " + uri);
 		
 		// String path = uri.substring(uri.lastIndexOf("/"));
 		// URI에서 마지막 /를 찾아 /getBoardExamList.do를 얻는다.
 		
 		String path = uri.substring(request.getContextPath().length());
 		// URI에서 /siteProject를 찾아 나머지 /board_exam/getBoardExamList.do를 얻는다.
-		 System.out.println("contextPath : " + request.getContextPath());
-		 System.out.println("path : " + path);
+//		System.out.println("contextPath : " + request.getContextPath());
+//		System.out.println("path : " + path);
 		
 		// 2. HandlerMapping을 통해 path에 해당하는 Controller를 검색한다.
 		Controller ctrl = handlerMapping.getController(path);
@@ -62,15 +62,25 @@ public class DispatcherServlet extends HttpServlet {
 		
 		// 4. ViewResolver를 통해 viewName에 해당하는 화면을 검색한다.
 		String view = null;
-		// 해당 파일명이 존재할 절대 경로를 만들어서 반환
-		view = viewResolver.getView(viewName);
-		
-		// 5. 검색된 화면으로 이동한다.
-		try {
-			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
-			dispatcher.forward(request, response);
-		}catch (Exception ex) {
-			System.out.println("forward 오류 : " + ex);
+		if(!viewName.contains(".do")) {
+			// 해당 파일명이 존재할 절대 경로를 만들어서 반환
+			view = viewResolver.getView(viewName);
+			
+			// 5. 검색된 화면으로 이동한다.
+			try {
+				RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+				dispatcher.forward(request, response);
+			}catch (Exception ex) {
+				System.out.println("forward 오류 : " + ex);
+			}
+		}else {
+			// WEB-INF를 경로 중에 사용하지 않는다.
+			view = "/siteProject" + viewName;
+			try {
+				response.sendRedirect(view);
+			} catch (IOException ioe) {
+				System.out.println("sendRedirect 오류 : " + ioe);
+			}
 		}
 	}
 }

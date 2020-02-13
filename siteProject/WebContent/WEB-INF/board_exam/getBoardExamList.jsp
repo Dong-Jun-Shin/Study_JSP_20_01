@@ -27,12 +27,36 @@
 		<script type="text/javascript" src="/siteProject/include/js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="/siteProject/include/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
-		
+			$(function(){
+				// 제목 클릭시 상세 페이지 이동을 위한 처리 이벤트
+				$(".goDetail").click(function(){
+					// 속성을 부여해서 식별을 비교적 단순하게 함.
+// 					var num = $(this).parents("tr").children().eq(0).html();
+					var num = $(this).parents("tr").attr("data-num");
+// 					console.log("num = " + num);
+					
+					$("#num").val(num);
+					$("#detailForm").attr({
+						"method" : "post",
+						"action" : "/siteProject/board_exam/detailBoard.do"
+					})
+					
+					$("#detailForm").submit();
+				})
+				
+				// 글쓰기 버튼 클릭시 처리 이벤트
+				$("#writeForm").click(function(){
+					location.href = "/siteProject/board_exam/insertForm.do";
+				});
+			})
 		</script>
 	</head>
 	<body>
 		<div class="contentContainer container-fluid">
 			<div class="text-center"><h3>글목록</h3></div>
+			<form name="detailForm" id="detailForm">
+				<input type="hidden" name="num" id="num">
+			</form>
 			
 			<%-- 리스트 시작 --%>
 			<div id="boardExamList">
@@ -57,9 +81,9 @@
 						<c:choose>
 							<c:when test="${not empty list }">
 								<c:forEach var="bvo" items="${list }">
-									<tr >
+									<tr class="tac" data-num="${bvo.num}">
 										<td>${bvo.num }</td>
-										<td><span>${bvo.title }</span></td>
+										<td class="tal"><span class="goDetail">${bvo.title }</span></td>
 										<td>${bvo.author }</td>
 										<td>${bvo.writeday }</td>
 										<td>${bvo.readcnt }</td>
@@ -68,7 +92,7 @@
 							</c:when>
 							<c:otherwise>
 							<tr>
-								<td colspan="5">등록된 게시물이 존재하지 않습니다.</td>
+								<td colspan="5" class="tac">등록된 게시물이 존재하지 않습니다.</td>
 							</tr>
 							</c:otherwise>
 						</c:choose>

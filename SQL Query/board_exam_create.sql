@@ -44,3 +44,12 @@ ORDER BY repRoot desc, repStep asc;
 INSERT INTO board_exam(num, author, title, content, reproot, repstep, repindent, passwd) 
 VALUES(board_exam_seq.NEXTVAL, '홍길동', 'mvc 게시판 작성', 'mvc 게시판 작성하기 예제입니다.', 
 board_exam_seq.CURRVAL, 0, 0, '1234');
+
+UPDATE board_exam SET readCnt = readCnt + 1 WHERE num = 1;
+
+SELECT num, author, title, content, TO_CHAR(writeday, 'YYYY-MM-DD HH24:MI:SS') writeday, 
+readCnt, repRoot, repIndent, repStep FROM board_exam WHERE num = 1;
+
+UPDATE board_exam SET author='', title='', content='', passwd='' WHERE num='';
+
+DELETE FROM board_exam WHERE num=8;

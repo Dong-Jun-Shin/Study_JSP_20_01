@@ -1,10 +1,10 @@
 function checkExp(elem, str){
 	var spaceExp = /\s/g;
 	
-	if(elem.val().replace(spaceExp, "")==""){
+	if($(elem).val().replace(spaceExp, "")==""){
 		alert(str + "를 입력해주세요.");
-		elem.focus();
-		elem.val("");
+		$(elem).focus();
+		$(elem).val("");
 		
 		return true;
 	}
