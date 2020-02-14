@@ -26,23 +26,102 @@
 		<script type="text/javascript" src="/siteProject/include/js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="/siteProject/include/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
+			var btnChk = 0; // 수정 버튼과 삭제 버튼을 구별하기 위한 변수
 			$(function(){
+				$("#pwdChk").hide();
+				
+				// 수정 버튼 클릭 시 처리 이벤트 (1번)
+				$("#boardUpdateBtn").click(function(){
+					$("#pwdChk").show();
+					$("#msg").text("작성시 입력한 비밀번호를 입력해 주세요.").css("color", "#8888FF");
+					btnChk = 1;
+				});
+				
+				// 삭제 버튼 클릭 시 처리 이벤트 (2번)
+				$("#boardDeleteBtn").click(function(){
+					$("#pwdChk").show();
+					$("#msg").text("작성시 입력한 비밀번호를 입력해 주세요.").css("color","#33EE33");
+					btnChk = 2;
+				});
+				
+				// 비밀번호 확인 버튼 클릭 시 처리 이벤트
+				$("#pwdBtn").click(function(event){
+					boardPwdConfirm();
+				})
+				
+				// 목록 버튼 클릭 시 처리 이벤트
 				$("#boardListBtn").click(function(){
 					location.href = "/siteProject/board_exam/getBoardExamList.do";
 				});
 			})
+			
+			// 비밀번호 확인 클릭 시, 실질적으로 처리하는 함수
+			function boardPwdConfirm(){
+				if(checkExp("#passwd", "비밀번호를")) return;
+				
+				$.ajax({
+					url : "/siteProject/board_exam/passwdCheck.do",
+					type : "post",
+					data : $("#f_pwd").serialize(), // 폼 전체 데이터 전송
+					dataType : "text",
+					
+					success : function(resultData){
+						
+						var goUrl=""; // 이동할 경로를 저장할 변수
+						if(resultData == 0){ // 일치하는 경우
+							$("#msg").text("작성 시 입력한 비밀번호가 일치하지 않습니다.").css("color", "red");
+							$("#passwd").select();
+						}else if(resultData == 1){ // 일치하지 않는 경우
+							$("#msg").text("비밀번호가 일치합니다.").css("color", "skyblue");
+								
+							// 비밀번호 검증 후, 버튼 구분 및 처리
+							if(btnChk == 1){
+								goUrl = "/siteProject/board_exam/updateForm.do";
+							}
+							
+							if(btnChk == 2){
+								goUrl = "/siteProject/board_exam/deleteBoard.do";	
+							}
+							
+							$("#f_data").attr("action", goUrl);
+							$("#f_data").submit();
+						}
+					},
+					
+					error : function(){
+						alert("시스템 오류입니다. 관리자에게 문의하세요");
+					}
+					
+				});
+			}
 		</script>
 	</head>
 	<body>
 <%-- 		${requestScope.detail.content} --%>
-		<h3 style="text-align: center;">글작성</h3>
+		<h3 style="text-align: center;">글상세</h3>
 		<div style="width: 90%; margin: 0px auto;">
-		 	<div class="contentBtn text-right">
-		  	  	<button type="button" class="btn btn-default" id="boardUpdateBtn">수정</button>
-			  	<button type="button" class="btn btn-default" id="boardDeleteBtn">삭제</button>
-			  	<button type="button" class="btn btn-default" id="boardReplyBtn">답변</button>
-			  	<button type="button" class="btn btn-default" id="boardListBtn">목록</button>
-		  	</div>
+			<form name="f_data" id="f_data" method="post">
+				<%-- 값 전달을 위해 담을 input 생성 (보일 필요 없으니, hidden) --%>
+				<input type="hidden" name="num" value="${detail.num }">
+			</form>
+				
+			<%-- 비밀번호 확인 버튼 및 버튼 추가 시작 --%>
+			<form class="form-inline" name="f_pwd" id="f_pwd">
+				<div id="pwdChk" class="authArea form-group pull-left">
+						<input type="hidden" name="num" id="num" value="${detail.num }" />
+						<label for="b_pwd" id="l_pwd">비밀번호 : </label>
+						<input type="password" name="passwd" id="passwd" />
+						
+						<button type="button" id="pwdBtn" class="btn-danger">확인</button>				
+						<span id="msg"></span>
+				</div>
+			 	<div class="contentBtn form-group pull-right">
+			  	  	<button type="button" class="btn btn-primary" id="boardUpdateBtn">수정</button>
+				  	<button type="button" class="btn btn-success" id="boardDeleteBtn">삭제</button>
+				  	<button type="button" class="btn btn-info" id="boardReplyBtn">답변</button>
+				  	<button type="button" class="btn btn-warning" id="boardListBtn">목록</button>
+			  	</div>
+			</form>
 			<table class="table table-bordered">
 				<colgroup>
 					<col width="25%" />
@@ -58,12 +137,12 @@
 						<td>${detail.writeday }</td>
 					</tr>
 					<tr>
-						<td class="success text-center">글제목</td>
-						<td colspan="3">${detail.title }</td>
-					</tr>
-					<tr>
 						<td class="success text-center">작성자</td>
 						<td colspan="3">${detail.author }</td>
+					</tr>
+					<tr>
+						<td class="success text-center">글제목</td>
+						<td colspan="3">${detail.title }</td>
 					</tr>
 					<tr>
 						<td class="success text-center" style="line-height: 200px">글내용</td>

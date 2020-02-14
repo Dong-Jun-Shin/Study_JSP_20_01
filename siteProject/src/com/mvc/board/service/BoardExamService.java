@@ -16,8 +16,8 @@ public class BoardExamService {
 		return service;
 	}
 	
-	public ArrayList<BoardExamVO> getboardExamList(){
-		ArrayList<BoardExamVO> list = bdao.getBoardExamList();
+	public ArrayList<BoardExamVO> getboardExamList(BoardExamVO bvo){
+		ArrayList<BoardExamVO> list = bdao.getBoardExamList(bvo);
 		
 		return list;
 	}
@@ -28,6 +28,20 @@ public class BoardExamService {
 		return result;
 	}
 	
+	public boolean updateBoardExam(BoardExamVO bvo) {
+		boolean result = bdao.updateBoardExam(bvo);
+		return result;
+	}
+	
+	public void deleteBoardExam(String num) {
+		bdao.deleteBoardExam(num);
+	}
+	
+	public int boardPasswdChk(String num, String passwd) {
+		int result = bdao.boardPasswdChk(num, passwd);
+		return result;
+	}
+
 	public void getReadCount(String num) {
 		bdao.getReadCount(num);
 	}
@@ -40,4 +54,11 @@ public class BoardExamService {
 		
 		return bvo;
 	}
+	
+	public BoardExamVO boardForm(String num) {
+		BoardExamVO bvo = bdao.boardDetail(num);
+		
+		return bvo;
+	}
+	
 }

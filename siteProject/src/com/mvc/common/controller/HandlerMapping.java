@@ -3,9 +3,13 @@ package com.mvc.common.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mvc.board.controller.DeleteBoardController;
 import com.mvc.board.controller.DetailBoardController;
 import com.mvc.board.controller.GetBoardExamListController;
 import com.mvc.board.controller.InsertFormController;
+import com.mvc.board.controller.PasswdCheckController;
+import com.mvc.board.controller.UpdateBoardController;
+import com.mvc.board.controller.UpdateFormController;
 import com.mvc.board.controller.InsertBoardController;
 
 public class HandlerMapping {
@@ -17,7 +21,11 @@ public class HandlerMapping {
 		mappings.put("/board_exam/getBoardExamList.do", new GetBoardExamListController());
 		mappings.put("/board_exam/insertForm.do", new InsertFormController());
 		mappings.put("/board_exam/insertBoard.do", new InsertBoardController());
+		mappings.put("/board_exam/updateForm.do", new UpdateFormController());
+		mappings.put("/board_exam/updateBoard.do", new UpdateBoardController());
+		mappings.put("/board_exam/deleteBoard.do", new DeleteBoardController());
 		mappings.put("/board_exam/detailBoard.do", new DetailBoardController());
+		mappings.put("/board_exam/passwdCheck.do", new PasswdCheckController());
 	}
 	
 	public Controller getController(String path) {

@@ -36,20 +36,30 @@ NOCYCLE
 CACHE 2
 ;
 
+--게시물 조회(게시물 등록 순서와 답변글로 정렬)
 SELECT num, author, title, content,
 TO_CHAR(writeday, 'YYYY/MM/DD') writeday,
 readCnt, repRoot, repStep, repIndent FROM board_exam
 ORDER BY repRoot desc, repStep asc;
 
+--게시물 등록
 INSERT INTO board_exam(num, author, title, content, reproot, repstep, repindent, passwd) 
 VALUES(board_exam_seq.NEXTVAL, '홍길동', 'mvc 게시판 작성', 'mvc 게시판 작성하기 예제입니다.', 
 board_exam_seq.CURRVAL, 0, 0, '1234');
 
+--게시물 조회수 증가
 UPDATE board_exam SET readCnt = readCnt + 1 WHERE num = 1;
 
+--게시물 상세 내용 조회
 SELECT num, author, title, content, TO_CHAR(writeday, 'YYYY-MM-DD HH24:MI:SS') writeday, 
 readCnt, repRoot, repIndent, repStep FROM board_exam WHERE num = 1;
 
+--게시물 수정
 UPDATE board_exam SET author='', title='', content='', passwd='' WHERE num='';
 
+--게시물 삭제
 DELETE FROM board_exam WHERE num=8;
+
+--비밀번호에 따른 판단값 출력
+SELECT NVL((SELECT 1 FROM board_exam WHERE num=2 AND passwd='1111'), 0) as result FROM dual;
+SELECT NVL((SELECT 1 FROM board_exam WHERE num=2 AND passwd='1234'), 0) as result FROM dual;

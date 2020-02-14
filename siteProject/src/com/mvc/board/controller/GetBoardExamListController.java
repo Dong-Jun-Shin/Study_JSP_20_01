@@ -13,8 +13,13 @@ import com.mvc.common.controller.Controller;
 public class GetBoardExamListController implements Controller{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
+		BoardExamVO bvo = new BoardExamVO();
+		bvo.setSearch(request.getParameter("search"));
+		bvo.setKeyword(request.getParameter("keyword"));
+		bvo.setSearch("all");
+		
 		BoardExamService service = BoardExamService.getInstance();
-		ArrayList<BoardExamVO> list = service.getboardExamList();
+		ArrayList<BoardExamVO> list = service.getboardExamList(bvo);
 		
 		request.setAttribute("list", list);
 		

@@ -12,6 +12,8 @@ import javax.sql.DataSource;
 
 import com.mvc.board.vo.BoardExamVO;
 
+import oracle.jdbc.proxy.annotation.Pre;
+
 public class BoardExamDAO {
 	private DataSource ds;
 
@@ -40,7 +42,7 @@ public class BoardExamDAO {
 	 * 
 	 * @return ArrayList<BoardVO> 리턴.
 	 */
-	public ArrayList<BoardExamVO> getBoardExamList() {
+	public ArrayList<BoardExamVO> getBoardExamList(BoardExamVO bvo) {
 		ArrayList<BoardExamVO> list = new ArrayList<BoardExamVO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -50,26 +52,39 @@ public class BoardExamDAO {
 		sql.append("SELECT num, author, title, content, ");
 		sql.append("TO_CHAR(writeday, 'YYYY/MM/DD') writeday, ");
 		sql.append("readCnt, repRoot, repStep, repIndent FROM board_exam ");
+		if("title".equals(bvo.getSearch())) {
+			sql.append("WHERE title LIKE ? ");
+		} else if("content".equals(bvo.getSearch())) {
+			sql.append("WHERE content LIKE ? ");
+		} else if("author".equals(bvo.getSearch())) {
+			sql.append("WHERE author LIKE ? ");
+		} 
+		
 		sql.append("ORDER BY repRoot desc, repStep asc");
 		
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement(sql.toString());
+			if(!"all".equals(bvo.getSearch())) {
+				pstmt.setString(1,  "%" + bvo.getKeyword() + "%");
+
+			}
+			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				BoardExamVO bvo = new BoardExamVO();
-				bvo.setNum(rs.getInt("num"));
-				bvo.setAuthor(rs.getString("author"));
-				bvo.setTitle(rs.getString("title"));
-				bvo.setContent(rs.getString("content"));
-				bvo.setWriteday(rs.getString("writeday"));
-				bvo.setReadcnt(rs.getInt("readcnt"));
-				bvo.setReproot(rs.getInt("reproot"));
-				bvo.setRepstep(rs.getInt("repstep"));
-				bvo.setRepindent(rs.getInt("repstep"));
+				BoardExamVO listVo = new BoardExamVO();
+				listVo.setNum(rs.getInt("num"));
+				listVo.setAuthor(rs.getString("author"));
+				listVo.setTitle(rs.getString("title"));
+				listVo.setContent(rs.getString("content"));
+				listVo.setWriteday(rs.getString("writeday"));
+				listVo.setReadcnt(rs.getInt("readcnt"));
+				listVo.setReproot(rs.getInt("reproot"));
+				listVo.setRepstep(rs.getInt("repstep"));
+				listVo.setRepindent(rs.getInt("repstep"));
 				
-				list.add(bvo);
+				list.add(listVo);
 			}
 			
 		} catch (SQLException sqle) {
@@ -305,5 +320,43 @@ public class BoardExamDAO {
 		}
 		
 		return bvo;
+	}
+	
+	public int boardPasswdChk(String num, String passwd) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		
+		try {
+			con = getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT NVL((SELECT 1 FROM board_exam ");
+			sql.append("WHERE num=? AND passwd=?), 0) ");
+			sql.append("as result FROM dual");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, Integer.parseInt(num));
+			pstmt.setString(2, passwd);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt("result");
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch (SQLException sqle) {
+				sqle.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 }

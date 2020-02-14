@@ -57,7 +57,21 @@
 			<form name="detailForm" id="detailForm">
 				<input type="hidden" name="num" id="num">
 			</form>
-			
+			<div class="pull-right">
+				<form class="form-inline" action="">
+					<div class="form-group">
+					  	<label for="keyword">검색조건</label>
+					  	<select name="search" id="search" class="form-control input-sm">
+					  		<option value="all">전체</option>
+					  		<option value="title">제목</option>
+					  		<option value="content">내용</option>
+					  		<option value="author">작성자</option>
+					  	</select>
+					  	<input type="text" name="keyword" id="keyword" class="form-control input-sm" placeholder="검색어를 입력해주세요" />
+					  	<button type="button" class="btn btn-warning btn-sm form-control" id="boardSearchBtn">검색</button>
+				  	</div>
+			  	</form>
+		  	</div>
 			<%-- 리스트 시작 --%>
 			<div id="boardExamList">
 				<table summary="게시판 예제 리스트" class="table table-hover">
