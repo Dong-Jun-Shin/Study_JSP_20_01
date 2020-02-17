@@ -9,7 +9,6 @@ import com.mvc.common.controller.Controller;
 
 public class DetailBoardController implements Controller{
 
-
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String num = request.getParameter("num");

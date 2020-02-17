@@ -55,10 +55,22 @@ public class BoardExamService {
 		return bvo;
 	}
 	
-	public BoardExamVO boardForm(String num) {
+	
+	public BoardExamVO updateBoardForm(String num) {
 		BoardExamVO bvo = bdao.boardDetail(num);
 		
 		return bvo;
 	}
 	
+	public BoardExamVO replyForm(String num) {
+		BoardExamVO bvo = bdao.boardDetail(num);
+		
+		return bvo;
+	}
+	
+	public boolean insertReply(BoardExamVO bvo) {
+		boolean result = bdao.insertReply(bvo);
+		
+		return result;
+	}
 }

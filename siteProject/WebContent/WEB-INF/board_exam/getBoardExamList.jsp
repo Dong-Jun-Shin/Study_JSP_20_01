@@ -44,11 +44,46 @@
 					$("#detailForm").submit();
 				})
 				
-				// 글쓰기 버튼 클릭시 처리 이벤트
+				// 글쓰기 버튼 클릭 시 처리 이벤트
 				$("#writeForm").click(function(){
 					location.href = "/siteProject/board_exam/insertForm.do";
 				});
-			})
+				
+				// 조건이 선택될 때 처리 이벤트
+				$("#search").change(function(){
+					if($("#search").val() == "all"){
+						$("#keyword").val("전체 데이터 조회합니다.");
+					}else if($("#search").val() != "all"){
+						$("#keyword").val("");
+						$("#keyword").focus();
+s					}
+				});
+				
+				// 검색을 클릭 시 처리 이벤트
+				$("#boardSearchBtn").click(function(){
+					if($("#search").val() != "all"){
+						if(checkExp("#keyword", "검색어")) return;
+					}
+					goPage();
+				});
+				
+				// 검색 후 검색 대상과 검색 단어 출력
+				if('${data.keyword}' != ""){
+					$("#keyword").val('${data.keyword}');
+					$("#search").val('${data.search}');
+				}
+			});
+			
+			function goPage(){
+				if($("#search").val() == "all"){
+					$("#keyword").val("");
+				}
+				$("#f_search").attr({
+					"method" : "post",
+					"action" : "/siteProject/board_exam/getBoardExamList.do"
+				});
+				$("#f_search").submit();
+			}
 		</script>
 	</head>
 	<body>
@@ -57,8 +92,9 @@
 			<form name="detailForm" id="detailForm">
 				<input type="hidden" name="num" id="num">
 			</form>
-			<div class="pull-right">
-				<form class="form-inline" action="">
+			<%--검색 기능 시작 --%>
+			<div id="boardSearch" class="pull-right">
+				<form id="f_search" name="f_search" class="form-inline">
 					<div class="form-group">
 					  	<label for="keyword">검색조건</label>
 					  	<select name="search" id="search" class="form-control input-sm">
@@ -67,11 +103,12 @@
 					  		<option value="content">내용</option>
 					  		<option value="author">작성자</option>
 					  	</select>
-					  	<input type="text" name="keyword" id="keyword" class="form-control input-sm" placeholder="검색어를 입력해주세요" />
-					  	<button type="button" class="btn btn-warning btn-sm form-control" id="boardSearchBtn">검색</button>
+					  	<input type="text" name="keyword" id="keyword" class="form-control input-sm" value="검색어를 입력해주세요" />
+					  	<button type="button"  id="boardSearchBtn" class="btn btn-warning btn-sm form-control">검색</button>
 				  	</div>
 			  	</form>
 		  	</div>
+		  	<%--검색 기능 끝 --%>
 			<%-- 리스트 시작 --%>
 			<div id="boardExamList">
 				<table summary="게시판 예제 리스트" class="table table-hover">
@@ -97,7 +134,15 @@
 								<c:forEach var="bvo" items="${list }">
 									<tr class="tac" data-num="${bvo.num}">
 										<td>${bvo.num }</td>
-										<td class="tal"><span class="goDetail">${bvo.title }</span></td>
+										<td class="tal">
+											<c:if test="${bvo.repstep > 0 }">
+												<c:forEach begin="1" end="${bvo.repindent }">
+													&nbsp;&nbsp;&nbsp;&nbsp;
+												</c:forEach>
+												<img src="/siteProject/image/reply.png"/>
+											</c:if>
+											<span class="goDetail">${bvo.title }</span>
+										</td>
 										<td>${bvo.author }</td>
 										<td>${bvo.writeday }</td>
 										<td>${bvo.readcnt }</td>

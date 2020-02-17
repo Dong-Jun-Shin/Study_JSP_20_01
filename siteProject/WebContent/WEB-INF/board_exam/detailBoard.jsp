@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
@@ -48,6 +49,15 @@
 				$("#pwdBtn").click(function(event){
 					boardPwdConfirm();
 				})
+				
+				// 답변 버튼 클릭 시 처리 이벤트
+				$("#boardReplyBtn").click(function(){
+					$("#f_data").attr({
+						"method" : "post",
+						"action" : "/siteProject/board_exam/replyForm.do"
+					});
+					$("#f_data").submit();
+				});
 				
 				// 목록 버튼 클릭 시 처리 이벤트
 				$("#boardListBtn").click(function(){
@@ -150,6 +160,9 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div style="width: 90%; margin: 0px auto;">
+			<c:import url="/WEB-INF/board_comment/insertCommentForm.jsp" />
 		</div>
 	</body>
 </html>

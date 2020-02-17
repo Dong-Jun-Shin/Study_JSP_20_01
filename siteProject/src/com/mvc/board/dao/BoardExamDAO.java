@@ -12,8 +12,6 @@ import javax.sql.DataSource;
 
 import com.mvc.board.vo.BoardExamVO;
 
-import oracle.jdbc.proxy.annotation.Pre;
-
 public class BoardExamDAO {
 	private DataSource ds;
 
@@ -82,11 +80,10 @@ public class BoardExamDAO {
 				listVo.setReadcnt(rs.getInt("readcnt"));
 				listVo.setReproot(rs.getInt("reproot"));
 				listVo.setRepstep(rs.getInt("repstep"));
-				listVo.setRepindent(rs.getInt("repstep"));
+				listVo.setRepindent(rs.getInt("repindent"));
 				
 				list.add(listVo);
 			}
-			
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 		} catch (Exception e) {
@@ -358,5 +355,92 @@ public class BoardExamDAO {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * makeReply() : repstep의 중첩을 막기 위해 기존 글들의 repstep을 더해준다.
+	 * 
+	 * @param root
+	 * @param step
+	 */
+	public void makeReply(int root, int step) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			con = getConnection();
+			
+			StringBuffer sql = new StringBuffer();
+			sql.append("UPDATE board_exam SET repstep = repstep + 1 ");
+			sql.append("WHERE reproot = ? AND repstep > ?");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, root);
+			pstmt.setInt(2, step);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * insertReply() : 답변을 등록하는 메서드
+	 * @param bvo 본래 게시글이 가지고 있는 bvo 정보
+	 * @return
+	 */
+	public boolean insertReply(BoardExamVO bvo) {
+		boolean success = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		makeReply(bvo.getReproot(), bvo.getRepstep());
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("INSERT INTO board_exam(num, author, passwd, title, content, reproot, repstep, repindent) ");
+		sql.append("VALUES(board_exam_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)");
+		
+		try {
+			con = getConnection();
+			con.setAutoCommit(false);
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, bvo.getAuthor());
+			pstmt.setString(2, bvo.getPasswd());
+			pstmt.setString(3, bvo.getTitle());
+			pstmt.setString(4, bvo.getContent());
+			pstmt.setInt(5, bvo.getReproot());
+			pstmt.setInt(6, bvo.getRepstep() + 1);
+			pstmt.setInt(7, bvo.getRepindent() + 1);
+			
+			if(pstmt.executeUpdate() == 1) {
+				con.commit();
+				success = true;
+			}else {
+				con.rollback();
+			}
+		} catch (SQLException sqle) {
+			System.out.println("insertReply 쿼리 error [ " + sqle + " ]");
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("insertReply 쿼리 error [ " + e + " ]");
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("insertReply 쿼리 error [ " + e + " ]");
+				e.printStackTrace();
+			}
+		}
+		
+		return success;
 	}
 }

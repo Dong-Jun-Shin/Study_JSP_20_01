@@ -16,7 +16,7 @@ public class UpdateFormController implements Controller {
 		String num = request.getParameter("num");
 		
 		BoardExamService service = BoardExamService.getInstance();
-		BoardExamVO bvo = service.boardForm(num);
+		BoardExamVO bvo = service.updateBoardForm(num);
 		
 		request.setAttribute("updateData", bvo);
 		

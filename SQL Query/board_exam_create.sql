@@ -63,3 +63,19 @@ DELETE FROM board_exam WHERE num=8;
 --비밀번호에 따른 판단값 출력
 SELECT NVL((SELECT 1 FROM board_exam WHERE num=2 AND passwd='1111'), 0) as result FROM dual;
 SELECT NVL((SELECT 1 FROM board_exam WHERE num=2 AND passwd='1234'), 0) as result FROM dual;
+
+--답변 글을 같이 조회, 정렬
+----reproot : 그룹번호(게시글과 답변)
+----repindent : 계층번호(답변 글 사이의 깊이 관계)
+----repstep : 위치번호(답변 게시글 고유번호)
+SELECT num, author, title, reproot, repindent, repstep from board_exam order by reproot desc, repstep asc;
+
+--답변글의 step에 대한 이전 값들의 중복 방지
+UPDATE board_exam SET repstep = repstep + 1 WHERE reproot = ? AND repstep > ?;
+
+--답변글 등록
+INSERT INTO board_exam(num, author, passwd, title, content, reproot, repstep, repindent) 
+VALUES(board_exam_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?);
+
+--문자열 변환
+UPDATE board_exam SET title=REPLACE(title, '└ ', '') WHERE repstep  > 0;

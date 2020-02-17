@@ -42,9 +42,9 @@
 					$("#writeForm").submit();
 				});
 				
-				$("#BoardListBtn").click(function(){
+				$("#boardCancle").click(function(){
 					location.href = "/siteProject/board_exam/getBoardExamList.do";
-				});
+				})
 			})
 		</script>
 	</head>
@@ -70,9 +70,8 @@
 			  </div>
 			  
 			  <div class="contentBtn text-right">
-			  	  <button type="button" class="btn btn-default" id="BoardListBtn">목록</button>
 				  <button type="button" class="btn btn-default" id="boardInsertBtn">제출</button>
-				  <button type="reset" class="btn btn-default">취소</button>
+				  <button type="button" class="btn btn-default" id="boardCancle">취소</button>
 			  </div>
 			</form>
 		</div>

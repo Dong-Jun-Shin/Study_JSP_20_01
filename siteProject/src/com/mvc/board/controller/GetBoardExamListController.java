@@ -13,15 +13,23 @@ import com.mvc.common.controller.Controller;
 public class GetBoardExamListController implements Controller{
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
+		String search = request.getParameter("search");
+		// 최초 요청 시 null 값 처리
+		if(search==null) {
+			search="all";
+		}
+		
+		
 		BoardExamVO bvo = new BoardExamVO();
-		bvo.setSearch(request.getParameter("search"));
+		bvo.setSearch(search);
 		bvo.setKeyword(request.getParameter("keyword"));
-		bvo.setSearch("all");
 		
 		BoardExamService service = BoardExamService.getInstance();
 		ArrayList<BoardExamVO> list = service.getboardExamList(bvo);
 		
+		// 값을 유지하기 위한 구문
 		request.setAttribute("list", list);
+		request.setAttribute("data", bvo);
 		
 		return "/board_exam/getBoardExamList";
 	}
