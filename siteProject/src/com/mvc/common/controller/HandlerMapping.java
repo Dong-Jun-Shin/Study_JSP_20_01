@@ -12,8 +12,11 @@ import com.mvc.board.controller.PasswdCheckController;
 import com.mvc.board.controller.ReplyFormController;
 import com.mvc.board.controller.UpdateBoardController;
 import com.mvc.board.controller.UpdateFormController;
+import com.mvc.comment.controller.DeleteCommentController;
 import com.mvc.comment.controller.GetCommentListController;
 import com.mvc.comment.controller.InsertCommentController;
+import com.mvc.comment.controller.PwdCheckController;
+import com.mvc.comment.controller.UpdateCommentController;
 import com.mvc.board.controller.InsertBoardController;
 
 public class HandlerMapping {
@@ -36,6 +39,9 @@ public class HandlerMapping {
 		/* 게시판의 댓글 처리 */
 		mappings.put("/board_comment/getCommentList.do", new GetCommentListController());
 		mappings.put("/board_comment/insertComment.do", new InsertCommentController());
+		mappings.put("/board_comment/updateComment.do", new UpdateCommentController());
+		mappings.put("/board_comment/deleteComment.do", new DeleteCommentController());
+		mappings.put("/board_comment/passwdCheck.do", new PwdCheckController());
 		
 	}
 	

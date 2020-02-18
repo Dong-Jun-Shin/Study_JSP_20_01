@@ -78,10 +78,10 @@
 					success : function(resultData){
 						
 						var goUrl=""; // 이동할 경로를 저장할 변수
-						if(resultData == 0){ // 일치하는 경우
+						if(resultData == 0){ // 불일치하는 경우
 							$("#msg").text("작성 시 입력한 비밀번호가 일치하지 않습니다.").css("color", "red");
 							$("#passwd").select();
-						}else if(resultData == 1){ // 일치하지 않는 경우
+						}else if(resultData == 1){ // 일치하는 경우
 							$("#msg").text("비밀번호가 일치합니다.").css("color", "skyblue");
 								
 							// 비밀번호 검증 후, 버튼 구분 및 처리
@@ -162,7 +162,7 @@
 			</table>
 		</div>
 		<div style="width: 90%; margin: 0px auto;">
-			<c:import url="/WEB-INF/board_comment/insertCommentForm.jsp" />
+			<c:import url="/WEB-INF/board_comment/getCommentList.jsp" />
 		</div>
 	</body>
 </html>

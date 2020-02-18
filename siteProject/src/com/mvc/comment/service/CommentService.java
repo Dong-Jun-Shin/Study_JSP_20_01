@@ -2,6 +2,8 @@ package com.mvc.comment.service;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mvc.comment.dao.CommentDAO;
 import com.mvc.comment.vo.CommentVO;
 
@@ -9,17 +11,26 @@ public class CommentService {
 	private CommentDAO cdao = CommentDAO.getInstance();
 	private static CommentService service = new CommentService();
 
-	public CommentService getInstance() {
+	public static CommentService getInstance() {
 		return service;
 	}
 	
 	private CommentService() {
 	}
 	
-	public ArrayList<CommentVO> getCommentList(String num){
+	public String getCommentList(String num){
+		String listData = "";
 		ArrayList<CommentVO> list = cdao.getCommentList(num);
+		ObjectMapper om = new ObjectMapper();
+		try {
+			// 객체를 Json형태의 String으로 변환하는 메서드
+			listData = om.writeValueAsString(list);
+//			System.out.println(listData);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		
-		return list;
+		return listData;
 	}
 	
 	public int insertComment(CommentVO cvo) {
@@ -28,6 +39,25 @@ public class CommentService {
 		return result;
 	}
 	
+	public int updateComment(CommentVO cvo) {
+		int result = cdao.updateComment(cvo);
+		
+		return result;
+	}
 	
+	public void deleteComment(String bc_num) {
+		cdao.deleteComment(bc_num);
+	}
 	
+	public int commentPasswdChk(String bc_num, String bc_passwd) {
+		int result = cdao.commentPasswdChk(bc_num, bc_passwd);
+		return result;
+	}
+	
+	public CommentVO getComment(String bc_num) {
+		CommentVO cvo = new CommentVO();
+		cvo = cdao.getComment(bc_num);
+		
+		return cvo;
+	}
 }

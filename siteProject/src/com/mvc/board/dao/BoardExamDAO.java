@@ -319,6 +319,13 @@ public class BoardExamDAO {
 		return bvo;
 	}
 	
+	/**
+	 * boardPasswdChk() : 비밀번호 체크하는 메서드
+	 * 
+	 * @param num
+	 * @param passwd
+	 * @return
+	 */
 	public int boardPasswdChk(String num, String passwd) {
 		Connection con = null;
 		PreparedStatement pstmt = null;

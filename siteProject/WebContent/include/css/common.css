@@ -13,14 +13,13 @@ h1.title {
 }
 /* 예제 실행을 위한 버튼이나 링크 배치하는 영역 표현.*/
 div.exec, div.console {
-	padding: 20px 15px;
+	padding: 10px 15px;
 	border-bottom: 1px solid #7BAEB5;
 }
 /* 결과 출력을 위한 영역 표현.*/
 div.console {
 	font-family: 'Courier New';
-	font-size: 12px;
-	font-style: italic;
+	font-size: 16px;
 	line-height: 130%;
 }
 /* 예제 화면을 구성하기 위한 영역 표현.*/

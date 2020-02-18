@@ -32,8 +32,17 @@ CACHE 2;
 --댓글 리스트 조회
 SELECT num, bc_num, bc_name, bc_content, 
 TO_CHAR(bc_date, 'YYYY-MM-DD HH24:MI:SS') AS bc_date 
-FROM board_comment WHERE num=3 ORDER BY bc_num desc;
+FROM board_comment WHERE num=7 ORDER BY bc_num asc;
 
---댓글 작성
-INSERT INTO board_comment(num, bc_num, bc_name, bc_content) 
-VALUES (?, ?, ?, ?);
+--댓글 등록
+INSERT INTO board_comment(num, bc_num, bc_name, bc_content, bc_pwd) 
+VALUES (?, board_comment_seq, ?, ?, ?);
+
+--비밀번호 체크
+SELECT NVL((SELECT 1 FROM board_comment WHERE bc_num=5 AND bc_pwd=1234), 0) as result FROM dual;
+
+
+SELECT num, bc_num, bc_name, bc_content, 
+		TO_CHAR(bc_date, 'YYYY-MM-DD HH24:MI:SS') AS bc_date 
+		FROM board_comment WHERE bc_num=7 ORDER BY bc_num asc;
+		
