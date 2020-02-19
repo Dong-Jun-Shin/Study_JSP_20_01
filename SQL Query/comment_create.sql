@@ -44,5 +44,5 @@ SELECT NVL((SELECT 1 FROM board_comment WHERE bc_num=5 AND bc_pwd=1234), 0) as r
 
 SELECT num, bc_num, bc_name, bc_content, 
 		TO_CHAR(bc_date, 'YYYY-MM-DD HH24:MI:SS') AS bc_date 
-		FROM board_comment WHERE bc_num=7 ORDER BY bc_num asc;
+		FROM board_comment WHERE bc_num=5 ORDER BY bc_num asc;
 		

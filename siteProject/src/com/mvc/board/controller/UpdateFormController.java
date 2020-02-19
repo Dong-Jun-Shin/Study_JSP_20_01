@@ -8,7 +8,6 @@ import com.mvc.board.vo.BoardExamVO;
 import com.mvc.common.controller.Controller;
 
 public class UpdateFormController implements Controller {
-
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String code = null; 

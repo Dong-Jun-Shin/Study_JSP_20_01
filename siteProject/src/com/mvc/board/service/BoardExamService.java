@@ -73,4 +73,10 @@ public class BoardExamService {
 		
 		return result;
 	}
+	
+	public int getCommentCnt(String num) {
+		int commentCnt = bdao.getCommentCnt(num);
+		
+		return commentCnt;
+	}
 }

@@ -142,6 +142,11 @@ s					}
 												<img src="/siteProject/image/reply.png"/>
 											</c:if>
 											<span class="goDetail">${bvo.title }</span>
+											<c:if test="${bvo.cCount > 0 }">
+												<span style="color: orange; font-size: 12px;">
+													 [${bvo.cCount }]
+												</span>
+											</c:if>
 										</td>
 										<td>${bvo.author }</td>
 										<td>${bvo.writeday }</td>

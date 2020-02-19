@@ -45,19 +45,15 @@ public class CommentService {
 		return result;
 	}
 	
-	public void deleteComment(String bc_num) {
-		cdao.deleteComment(bc_num);
+	public int deleteComment(String bc_num) {
+		int result = cdao.deleteComment(bc_num);
+		
+		return result;
 	}
 	
 	public int commentPasswdChk(String bc_num, String bc_passwd) {
 		int result = cdao.commentPasswdChk(bc_num, bc_passwd);
-		return result;
-	}
-	
-	public CommentVO getComment(String bc_num) {
-		CommentVO cvo = new CommentVO();
-		cvo = cdao.getComment(bc_num);
 		
-		return cvo;
+		return result;
 	}
 }

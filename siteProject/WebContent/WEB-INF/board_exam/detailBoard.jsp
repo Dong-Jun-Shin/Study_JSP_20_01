@@ -40,6 +40,29 @@
 				
 				// 삭제 버튼 클릭 시 처리 이벤트 (2번)
 				$("#boardDeleteBtn").click(function(){
+					var num = ${detail.num};
+					
+					$.ajax({
+						url : "/siteProject/board_exam/commentCntBoard.do",
+						type : "post",
+						data : "num=" + num,
+						dataType : "text",
+						error : function(){
+							alert("시스템 오류입니다. 관리자에게 문의하세요.");
+						},
+						
+						success : function(resultData){
+							if(resultData == 0){
+								$("#pwdChk").show();
+								$("#msg").text("작성시 입력한 비밀번호를 입력해 주세요.").css("color", "#000000");
+								btnChk = 2;
+							}else{
+								alert("댓글 존재 시, 게시물을 삭제할 수 없습니다.\n 댓글을 삭제한 후 다시 시도해 주세요.")
+								$("#pwdChk").hide();
+							}
+						}
+					})
+					
 					$("#pwdChk").show();
 					$("#msg").text("작성시 입력한 비밀번호를 입력해 주세요.").css("color","#33EE33");
 					btnChk = 2;

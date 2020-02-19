@@ -49,7 +49,10 @@ public class BoardExamDAO {
 		StringBuffer sql = new StringBuffer(); 
 		sql.append("SELECT num, author, title, content, ");
 		sql.append("TO_CHAR(writeday, 'YYYY/MM/DD') writeday, ");
-		sql.append("readCnt, repRoot, repStep, repIndent FROM board_exam ");
+		sql.append("readCnt, repRoot, repStep, repIndent, ");
+		sql.append("(SELECT COUNT(num) FROM board_comment WHERE num = b.num) AS cCount ");
+		sql.append("FROM board_exam b ");
+		
 		if("title".equals(bvo.getSearch())) {
 			sql.append("WHERE title LIKE ? ");
 		} else if("content".equals(bvo.getSearch())) {
@@ -81,6 +84,7 @@ public class BoardExamDAO {
 				listVo.setReproot(rs.getInt("reproot"));
 				listVo.setRepstep(rs.getInt("repstep"));
 				listVo.setRepindent(rs.getInt("repindent"));
+				listVo.setcCount(rs.getInt("cCount"));
 				
 				list.add(listVo);
 			}
@@ -400,7 +404,7 @@ public class BoardExamDAO {
 	/**
 	 * insertReply() : 답변을 등록하는 메서드
 	 * @param bvo 본래 게시글이 가지고 있는 bvo 정보
-	 * @return
+	 * @return return 결과 반환(true: 성공, false: 실패)
 	 */
 	public boolean insertReply(BoardExamVO bvo) {
 		boolean success = false;
@@ -449,5 +453,46 @@ public class BoardExamDAO {
 		}
 		
 		return success;
+	}
+	
+	/**
+	 * getCommentCnt() : 댓글의 수를 반환
+	 * @param num 게시글 번호
+	 * @return cnt 해당 게시글의 댓글 개수
+	 */
+	public int getCommentCnt(String num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int cnt = 0;
+		
+		try {
+			con = getConnection();
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT COUNT(bc_num) ");
+			sql.append("FROM board_comment WHERE num = ? ");
+			
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, Integer.parseInt(num));
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				cnt = rs.getInt(1);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch (SQLException sqle) {
+				sqle.printStackTrace();
+			}
+		}
+		
+		return cnt;
 	}
 }

@@ -79,3 +79,8 @@ VALUES(board_exam_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?);
 
 --문자열 변환
 UPDATE board_exam SET title=REPLACE(title, '└ ', '') WHERE repstep  > 0;
+
+SELECT num, author, title, content,
+TO_CHAR(writeday, 'YYYY/MM/DD') writeday,
+readCnt, repRoot, repStep, repIndent, 
+FROM board_exam b;

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mvc.comment.service.CommentService;
-import com.mvc.comment.vo.CommentVO;
 import com.mvc.common.controller.Controller;
 
 public class DeleteCommentController implements Controller {
@@ -16,9 +15,7 @@ public class DeleteCommentController implements Controller {
 		CommentService service = CommentService.getInstance();
 		service.deleteComment(bc_num);
 		
-		CommentVO cvo = service.getComment(bc_num);
-		
-		return "/board_exam/detailBoard.do?num="+ cvo.getNum();
+		return "/board_exam/detailBoard.do?num="+ request.getParameter("num");
 	}
 
 }

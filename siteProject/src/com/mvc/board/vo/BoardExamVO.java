@@ -11,7 +11,8 @@ public class BoardExamVO {
 	private int repstep;
 	private int repindent;
 	private String passwd;
-	
+	private int cCount;
+
 	// 조건 검색 시 사용할 속성
 	private String search = "";
 	private String keyword = "";
@@ -115,11 +116,20 @@ public class BoardExamVO {
 		this.keyword = keyword;
 	}
 
+	public int getcCount() {
+		return cCount;
+	}
+
+	public void setcCount(int cCount) {
+		this.cCount = cCount;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardExamVO [num=" + num + ", author=" + author + ", title=" + title + ", content=" + content
 				+ ", writeday=" + writeday + ", readcnt=" + readcnt + ", reproot=" + reproot + ", repstep=" + repstep
-				+ ", repindent=" + repindent + ", passwd=" + passwd + ", search=" + search + ", keyword=" + keyword
-				+ "]";
+				+ ", repindent=" + repindent + ", passwd=" + passwd + ", cCount=" + cCount + ", search=" + search
+				+ ", keyword=" + keyword + "]";
 	}
+
 }

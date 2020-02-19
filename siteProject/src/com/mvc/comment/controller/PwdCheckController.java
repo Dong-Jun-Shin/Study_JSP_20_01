@@ -17,10 +17,8 @@ public class PwdCheckController implements Controller {
 		
 		CommentService service = CommentService.getInstance();
 		int result = service.commentPasswdChk(bc_num, bc_passwd);
-		CommentVO cvo = service.getComment(bc_num);
 		
 		request.setAttribute("resultData", result);
-		request.setAttribute("content", cvo.getBc_content());
 		
 		return "/common/resultData";
 	}

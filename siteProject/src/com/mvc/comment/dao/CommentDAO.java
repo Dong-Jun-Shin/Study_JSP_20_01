@@ -83,54 +83,6 @@ public class CommentDAO {
 	}
 	
 	/**
-	 * getComment() : 댓글의 정보를 조회
-	 * @param bc_num
-	 * @return
-	 */
-	public CommentVO getComment(String bc_num) {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		CommentVO cvo = new CommentVO();
-		
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT num, bc_num, bc_name, bc_content, ");
-		sql.append("TO_CHAR(bc_date, 'YYYY-MM-DD HH24:MI:SS') AS bc_date ");
-		sql.append("FROM board_comment WHERE bc_num=? ORDER BY bc_num asc");
-		
-		try {
-			con = getConnection();
-			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setInt(1, Integer.parseInt(bc_num));
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				cvo.setNum(rs.getInt("num"));
-				cvo.setBc_num(rs.getInt("bc_num"));
-				cvo.setBc_name(rs.getString("bc_name"));
-				cvo.setBc_content(rs.getString("bc_content"));
-				cvo.setBc_date(rs.getString("bc_date"));
-			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(rs != null) rs.close();
-				if(pstmt != null) pstmt.close();
-				if(con != null) con.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return cvo;
-	}
-	
-	/**
 	 * insertComment() : 댓글 등록
 	 * 
 	 * @param cvo
@@ -187,22 +139,15 @@ public class CommentDAO {
 		int result = 0;
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("UPDATE board_comment SET bc_content = ? ");
-		if(cvo.getBc_pwd() != "") sql.append(", bc_pwd = ? ");
-		sql.append("WHERE bc_num = ?");
+		sql.append("UPDATE board_comment SET bc_content = ?, ");
+		sql.append("bc_date = SYSDATE WHERE bc_num = ?");
 		
 		
 		try {
 			con = getConnection();
 			pstmt = con.prepareStatement(sql.toString());
 			pstmt.setString(1, cvo.getBc_content());
-			
-			if(cvo.getBc_pwd() != "") {
-				pstmt.setString(2, cvo.getBc_pwd());
-				pstmt.setInt(3, cvo.getBc_num());
-			}else {
-				pstmt.setInt(2, cvo.getBc_num());
-			}
+			pstmt.setInt(2, cvo.getBc_num());
 			
 			result = pstmt.executeUpdate(); 
 		} catch (SQLException sqle) {
