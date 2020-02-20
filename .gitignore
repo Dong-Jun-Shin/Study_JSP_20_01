@@ -7,3 +7,4 @@ Servers/
 *.classpath
 *bin/
 Team_Exam_JSP/
+siteProject/.gitignore
